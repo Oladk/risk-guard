@@ -1,0 +1,10 @@
+streamlit>=1.36
+pandas>=2.0
+altair>=5.0
+requests>=2.31
+tzdata>=2024.1
+psycopg[binary]>=3.1   # base Postgres gratuite (Neon) en cloud ; inutile en local SQLite
+pytest>=8.0
+
+# Optionnel — synchronisation broker MT5 (Windows + terminal MetaTrader 5 ouvert) :
+# MetaTrader5>=5.0.45

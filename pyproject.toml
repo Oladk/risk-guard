@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "risk-guard"
+version = "0.2.0"
+description = "Outil de gestion de capital et de risque pour traders (forex, BRVM) — garde-fou personnel en saisie manuelle."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "streamlit>=1.36",
+    "pandas>=2.0",
+    "altair>=5.0",
+    "requests>=2.31",
+    "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+mt5 = ["MetaTrader5>=5.0.45"]
+postgres = ["psycopg[binary]>=3.1"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+risk-guard = "run:main"
+
+[tool.setuptools]
+py-modules = ["run"]
+
+[tool.setuptools.packages.find]
+include = ["src*", "components*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

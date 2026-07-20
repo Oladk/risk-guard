@@ -1,0 +1,15 @@
+data/
+*.db
+*.sqlite3
+.streamlit/secrets.toml
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+env/
+.git/
+.gitignore
+tests/
+*.md
+.claude/

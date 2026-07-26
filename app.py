@@ -89,6 +89,24 @@ top_r.markdown(
     f"<div style='text-align:right;font-size:1.4rem;font-weight:700;margin-top:18px;'>"
     f"{status_txt}</div>", unsafe_allow_html=True)
 
+st.caption("🛡️ **Risk Guard** surveille ton risque et t'alerte quand tu approches tes limites — "
+           "tu gardes toujours la main.")
+
+with st.expander("❓ Comment ça marche (à lire une fois)", expanded=(len(trades) == 0)):
+    st.markdown(
+        "**Le principe, en 3 étapes :**\n\n"
+        "1. **Tes limites sont déjà réglées** selon le profil choisi à l'inscription "
+        "(ex. ne pas risquer de perdre plus de 3 % de ton capital dans la journée). "
+        "Tu les ajustes quand tu veux dans **⚙️ Règles & compte**.\n"
+        "2. **Note chaque trade ici.** Dès que tu **ouvres** une position chez ton broker, "
+        "saisis-la dans **⚡ Saisie éclair** (instrument, sens, risque). Quand tu la **fermes**, "
+        "indique ton résultat dans le **📓 Journal**.\n"
+        "3. **L'outil t'alerte** quand tu approches (orange) ou atteins (rouge) une limite. "
+        "**Il ne bloque pas et ne trade pas à ta place** — c'est toi qui décides quoi faire.\n\n"
+        "> ℹ️ L'outil **ne se connecte pas à ton broker** : c'est toi qui notes tes trades, lui "
+        "il surveille et te prévient. C'est ton **garde-fou personnel**."
+    )
+
 # --- Alerte forte ------------------------------------------------------------
 if rs.locked:
     # Mode strict (le trader a passé une règle en BLOCK) : refus + STOP.
@@ -149,6 +167,8 @@ if rs.open_risk > 0:
 
 # --- Saisie éclair (log rapide, sans friction) ------------------------------
 with st.expander("⚡ Saisie éclair — loguer un trade en quelques secondes"):
+    st.caption("À chaque position que tu ouvres chez ton broker, note-la ici. "
+               "L'outil calcule ton risque et te prévient si tu approches une limite.")
     with st.form("quick_open", clear_on_submit=True):
         q1, q2, q3, q4 = st.columns([2.2, 1.2, 1.2, 1.2])
         q_instr = q1.text_input("Instrument", value="EURUSD")

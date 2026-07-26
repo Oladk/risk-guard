@@ -172,8 +172,10 @@ with st.expander("⚡ Saisie éclair — loguer un trade en quelques secondes"):
     with st.form("quick_open", clear_on_submit=True):
         q1, q2, q3, q4 = st.columns([2.2, 1.2, 1.2, 1.2])
         q_instr = q1.text_input("Instrument", value="EURUSD")
-        q_dir = q2.selectbox("Sens", C.DIRECTIONS)
-        q_risk = q3.number_input("Risque %", min_value=0.0, value=1.0, step=0.25)
+        q_dir = q2.selectbox("Sens", C.DIRECTIONS,
+                             format_func=lambda d: C.DIRECTION_LABELS[d], help=C.HELP_SENS)
+        q_risk = q3.number_input("Risque %", min_value=0.0, value=1.0, step=0.25,
+                                 help=C.HELP_RISQUE)
         q3.caption(f"≈ {RM.format_money(dsb * q_risk / 100, cur)}")
         q4.write("")
         q_go = q4.form_submit_button("Ouvrir", type="primary", use_container_width=True)
@@ -218,7 +220,7 @@ else:
     for t in open_positions:
         risk_disp = RM.format_money(t.planned_risk_amount, cur)
         st.markdown(
-            f"**#{t.id} · {t.instrument}** ({t.market}, {t.direction}) — "
+            f"**#{t.id} · {t.instrument}** ({t.market}, {C.DIRECTION_LABELS.get(t.direction, t.direction)}) — "
             f"risque {risk_disp} · {t.planned_risk_pct*100:.2f}% · {t.planned_risk_R:.2f}R"
             + (f" · 🏷️ {t.emotion_tag}" if t.emotion_tag else "")
         )
@@ -226,7 +228,8 @@ else:
     st.markdown("##### Clôturer une position")
     st.caption("La clôture reste possible même en mode STOP — le journal doit rester juste.")
     with st.form("close_form", clear_on_submit=True):
-        labels = {f"#{t.id} · {t.instrument} ({t.direction})": t.id for t in open_positions}
+        labels = {f"#{t.id} · {t.instrument} ({C.DIRECTION_LABELS.get(t.direction, t.direction)})": t.id
+                  for t in open_positions}
         choice = st.selectbox("Position", list(labels.keys()))
         pnl = st.number_input(
             f"P&L réalisé ({cur}) — négatif si perte", value=0.0, step=100.0, format="%.2f")

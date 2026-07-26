@@ -65,7 +65,8 @@ else:
         instrument = c1.text_input("Instrument", value=prefill.get("instrument", "EURUSD"))
         market = c2.selectbox("Marché", C.MARKETS,
                               index=C.MARKETS.index(prefill.get("market", "FOREX")))
-        direction = c3.selectbox("Direction", C.DIRECTIONS)
+        direction = c3.selectbox("Sens", C.DIRECTIONS,
+                                 format_func=lambda d: C.DIRECTION_LABELS[d], help=C.HELP_SENS)
 
         c4, c5 = st.columns(2)
         unit = c4.radio("Unité de risque", [C.UNIT_PCT, C.UNIT_R],
@@ -73,12 +74,12 @@ else:
         if unit == C.UNIT_PCT:
             risk_val = c5.number_input("Risque (% du capital)", min_value=0.0,
                                        value=float(prefill.get("risk_pct", 1.0)),
-                                       step=0.25, format="%.2f")
+                                       step=0.25, format="%.2f", help=C.HELP_RISQUE)
             risk_pct = risk_val / 100.0
         else:
             risk_val = c5.number_input("Risque (en R)", min_value=0.0,
                                        value=float(prefill.get("risk_r", 1.0)),
-                                       step=0.25, format="%.2f")
+                                       step=0.25, format="%.2f", help=C.HELP_RISQUE)
             risk_pct = risk_val * account.one_R_pct
 
         with st.expander("Détails optionnels (entrée / stop / taille) — pour le R réel"):
@@ -165,7 +166,8 @@ if not open_positions:
     st.info("Aucune position ouverte à clôturer.")
 else:
     with st.form("close_form_journal", clear_on_submit=True):
-        labels = {f"#{t.id} · {t.instrument} ({t.direction}) — risque "
+        labels = {f"#{t.id} · {t.instrument} "
+                  f"({C.DIRECTION_LABELS.get(t.direction, t.direction)}) — risque "
                   f"{RM.format_money(t.planned_risk_amount, cur)}": t.id
                   for t in open_positions}
         choice = st.selectbox("Position à clôturer", list(labels.keys()))
@@ -189,7 +191,7 @@ else:
     for t in trades:
         rows.append({
             "id": t.id, "instrument": t.instrument, "marché": t.market,
-            "sens": t.direction, "statut": t.status,
+            "sens": C.DIRECTION_LABELS.get(t.direction, t.direction), "statut": t.status,
             "ouvert": t.opened_at.strftime("%Y-%m-%d %H:%M") if t.opened_at else "",
             "clôturé": t.closed_at.strftime("%Y-%m-%d %H:%M") if t.closed_at else "",
             "risque_%": round(t.planned_risk_pct * 100, 2),

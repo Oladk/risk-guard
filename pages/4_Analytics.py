@@ -39,7 +39,7 @@ df = pd.DataFrame([{
     "id": t.id,
     "instrument": t.instrument,
     "marché": t.market,
-    "sens": t.direction,
+    "sens": C.DIRECTION_LABELS.get(t.direction, t.direction),
     "closed_at": t.closed_at,
     "jour": t.closed_at.strftime("%A"),
     "pnl": t.realized_pnl_amount or 0.0,

@@ -14,7 +14,16 @@ EMOTION_TAGS = [
 
 # --- Marchés et directions ---------------------------------------------------
 MARKETS = ["FOREX", "BRVM", "OTHER"]
-DIRECTIONS = ["LONG", "SHORT"]
+DIRECTIONS = ["LONG", "SHORT"]  # valeurs internes (standard finance)
+# Affichage côté trader : les termes de leur broker (MT4/MT5).
+DIRECTION_LABELS = {"LONG": "BUY", "SHORT": "SELL"}
+
+# Textes d'aide réutilisés dans les formulaires (bulles « ? »).
+HELP_SENS = ("BUY (achat) = tu paries que le prix va MONTER. "
+             "SELL (vente) = tu paries qu'il va BAISSER.")
+HELP_RISQUE = ("Le maximum que tu acceptes de PERDRE sur ce trade (en % de ton capital), "
+               "pas le montant investi. Ex. : 1% ≈ 10 USD si ton capital est 1 000 USD. "
+               "L'outil additionne ces risques et t'alerte quand tu approches ta limite.")
 
 # --- Statuts de trade --------------------------------------------------------
 STATUS_OPEN = "OPEN"

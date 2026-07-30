@@ -34,13 +34,14 @@ from components import shell
 def _mt5_connector(acc):
     return MT5Connector(login=acc.mt5_login, server=acc.mt5_server, path=acc.mt5_path)
 
-st.set_page_config(page_title="Risk Guard — Cockpit", page_icon="🛡️", layout="wide")
+st.set_page_config(page_title="Vigie — Cockpit", page_icon="🔭", layout="wide")
 
 conn = service.connect()
 shell.start(conn)
 
 with st.sidebar:
-    st.markdown("## 🛡️ Risk Guard")
+    st.markdown("## 🔭 Vigie")
+    st.caption("L'œil sur ton risque.")
     account_id = account_selector.render(conn)
     shell.sidebar_user_controls()
 
@@ -89,7 +90,7 @@ top_r.markdown(
     f"<div style='text-align:right;font-size:1.4rem;font-weight:700;margin-top:18px;'>"
     f"{status_txt}</div>", unsafe_allow_html=True)
 
-st.caption("🛡️ **Risk Guard** surveille ton risque et t'alerte quand tu approches tes limites — "
+st.caption("🔭 **Vigie** surveille ton risque et t'alerte quand tu approches tes limites — "
            "tu gardes toujours la main.")
 
 with st.expander("❓ Comment ça marche (à lire une fois)", expanded=(len(trades) == 0)):

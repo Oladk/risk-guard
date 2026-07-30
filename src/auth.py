@@ -93,6 +93,24 @@ def logout() -> None:
     st.session_state.pop("account_id", None)
 
 
+def is_admin(conn) -> bool:
+    """Admin = propriétaire en local, OU 1er utilisateur (id 1), OU listé dans les secrets."""
+    import streamlit as st
+    if not is_auth_required():
+        return True
+    uid = st.session_state.get("user_id")
+    if not uid:
+        return False
+    if uid == 1:
+        return True
+    try:
+        admins = [u.lower() for u in st.secrets.get("admin", {}).get("usernames", [])]
+        row = conn.execute("SELECT username FROM users WHERE id = ?", (uid,)).fetchone()
+        return bool(row) and row["username"] in admins
+    except Exception:
+        return False
+
+
 def _ensure_account(conn: sqlite3.Connection, user_id: int, username: str) -> None:
     from . import repository as R
     if not R.list_accounts(conn, user_id=user_id):
@@ -103,7 +121,8 @@ def _ensure_account(conn: sqlite3.Connection, user_id: int, username: str) -> No
 
 def _render_login(conn: sqlite3.Connection) -> None:
     import streamlit as st
-    st.title("🛡️ Risk Guard — Connexion")
+    st.title("🔭 Vigie — Connexion")
+    st.caption("L'œil sur ton risque — surveille tes limites, garde la main.")
     tab_login, tab_register = st.tabs(["Connexion", "Créer un compte"])
 
     with tab_login:

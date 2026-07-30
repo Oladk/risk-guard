@@ -46,7 +46,7 @@ def build_digest(account, rs, now: datetime) -> tuple[str, str]:
         f"Risque encore ouvert : {_money(rs.open_risk, cur)}",
         f"Statut : {rs.global_level}" + (" — STOP actif" if rs.locked else ""),
     ]
-    subject = "📊 Risk Guard — récap du jour"
+    subject = "📊 Vigie — récap du jour"
     body = "\n".join([subject, ""] + [f"• {l}" for l in lines])
     return subject, body
 

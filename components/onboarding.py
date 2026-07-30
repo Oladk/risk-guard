@@ -19,7 +19,7 @@ _PROFILE_HELP = {
 
 def render(conn, account) -> None:
     """Affiche l'assistant. Enregistre et marque le compte comme configuré au submit."""
-    st.title("👋 Bienvenue sur Risk Guard")
+    st.title("👋 Bienvenue sur Vigie")
     st.caption("Configurons ton garde-fou en une minute. Tu pourras tout ajuster ensuite.")
 
     tz_index = _TIMEZONES.index(account.timezone) if account.timezone in _TIMEZONES else 0

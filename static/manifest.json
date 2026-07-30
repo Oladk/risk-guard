@@ -1,13 +1,13 @@
 {
-  "name": "Risk Guard",
-  "short_name": "RiskGuard",
-  "description": "Gestion de capital et de risque pour traders.",
+  "name": "Vigie",
+  "short_name": "Vigie",
+  "description": "L'œil sur ton risque — alertes de gestion du capital pour traders.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0e1117",
-  "theme_color": "#e63946",
+  "background_color": "#0B1A22",
+  "theme_color": "#22B8D6",
   "icons": [
     {
       "src": "/app/static/icon.svg",

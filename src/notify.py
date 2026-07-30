@@ -74,7 +74,7 @@ def read_secrets() -> tuple[Optional[dict], Optional[dict]]:
 def build_message(kind: str, lines: list[str], when_local: str = "") -> tuple[str, str]:
     """Construit (sujet, corps) pour une alerte de risque."""
     icon = "🛑" if kind == "BLOCK" else "⚠️"
-    subject = f"{icon} Risk Guard — {'Blocage' if kind == 'BLOCK' else 'Avertissement'}"
+    subject = f"{icon} Vigie — {'Blocage' if kind == 'BLOCK' else 'Alerte risque'}"
     body = "\n".join([subject, ""] + [f"• {l}" for l in lines])
     if when_local:
         body += f"\n\nProchain reset : {when_local}"

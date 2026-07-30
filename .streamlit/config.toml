@@ -1,9 +1,10 @@
+# Vigie — DA « poste de veille » : fond sombre mer/nuit, accent cyan-balise.
 [theme]
 base = "dark"
-primaryColor = "#e63946"
-backgroundColor = "#0e1117"
-secondaryBackgroundColor = "#1a1d29"
-textColor = "#fafafa"
+primaryColor = "#22B8D6"
+backgroundColor = "#0B1A22"
+secondaryBackgroundColor = "#12303A"
+textColor = "#E7EEF2"
 font = "sans serif"
 
 [server]

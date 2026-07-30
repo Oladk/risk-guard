@@ -94,6 +94,11 @@ def test_coach_runs_empty(tmp_path):
     assert not at.exception
 
 
+def test_admin_runs_without_exception(tmp_path):
+    at = _run("pages/6_Admin.py", tmp_path)
+    assert not at.exception
+
+
 def test_coach_runs_with_data(tmp_path):
     os.environ["RISK_DB_PATH"] = str(tmp_path / "risk.db")
     from src import repository as R

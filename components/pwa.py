@@ -18,7 +18,7 @@ _SNIPPET = """
       m.rel = 'manifest'; m.href = '/app/static/manifest.json';
       doc.head.appendChild(m);
       var t = doc.createElement('meta');
-      t.name = 'theme-color'; t.content = '#22B8D6';
+      t.name = 'theme-color'; t.content = '#5B7CFA';
       doc.head.appendChild(t);
       var a = doc.createElement('link');
       a.rel = 'apple-touch-icon'; a.href = '/app/static/icon.svg';

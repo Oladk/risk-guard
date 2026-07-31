@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0B1A22"/>
+  <rect width="512" height="512" rx="112" fill="#0E1330"/>
   <!-- Radar de veille -->
-  <circle cx="248" cy="264" r="150" fill="none" stroke="#22B8D6" stroke-width="9" opacity="0.30"/>
-  <circle cx="248" cy="264" r="96" fill="none" stroke="#22B8D6" stroke-width="9" opacity="0.55"/>
+  <circle cx="248" cy="264" r="150" fill="none" stroke="#5B7CFA" stroke-width="9" opacity="0.30"/>
+  <circle cx="248" cy="264" r="96" fill="none" stroke="#5B7CFA" stroke-width="9" opacity="0.60"/>
   <!-- Faisceau de balayage -->
-  <path d="M248 264 L248 108 A156 156 0 0 1 391 210 Z" fill="#22B8D6" opacity="0.16"/>
+  <path d="M248 264 L248 108 A156 156 0 0 1 391 210 Z" fill="#5B7CFA" opacity="0.18"/>
   <!-- Croix de visée -->
-  <line x1="248" y1="92" x2="248" y2="436" stroke="#22B8D6" stroke-width="6" opacity="0.22"/>
-  <line x1="92" y1="264" x2="404" y2="264" stroke="#22B8D6" stroke-width="6" opacity="0.22"/>
+  <line x1="248" y1="92" x2="248" y2="436" stroke="#5B7CFA" stroke-width="6" opacity="0.24"/>
+  <line x1="92" y1="264" x2="404" y2="264" stroke="#5B7CFA" stroke-width="6" opacity="0.24"/>
   <!-- Centre -->
-  <circle cx="248" cy="264" r="16" fill="#22B8D6"/>
+  <circle cx="248" cy="264" r="16" fill="#5B7CFA"/>
   <!-- Le risque repéré -->
-  <circle cx="336" cy="184" r="22" fill="#FF5A5F"/>
+  <circle cx="336" cy="184" r="22" fill="#FF5D62"/>
 </svg>

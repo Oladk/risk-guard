@@ -44,14 +44,14 @@ with st.sidebar:
         """
         <div style="display:flex;align-items:center;gap:11px;margin:2px 0 2px;">
           <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true">
-            <circle cx="22" cy="24" r="18" fill="none" stroke="#0E7C90" stroke-width="2"/>
-            <circle cx="22" cy="24" r="10" fill="none" stroke="#2CC5DE" stroke-width="2"/>
-            <line x1="4" y1="24" x2="40" y2="24" stroke="#0E7C90" stroke-width="1.4" opacity="0.5"/>
-            <line x1="22" y1="6" x2="22" y2="42" stroke="#0E7C90" stroke-width="1.4" opacity="0.5"/>
-            <circle cx="22" cy="24" r="2.6" fill="#2CC5DE"/>
+            <circle cx="22" cy="24" r="18" fill="none" stroke="#33407e" stroke-width="2"/>
+            <circle cx="22" cy="24" r="10" fill="none" stroke="#5B7CFA" stroke-width="2"/>
+            <line x1="4" y1="24" x2="40" y2="24" stroke="#33407e" stroke-width="1.4" opacity="0.6"/>
+            <line x1="22" y1="6" x2="22" y2="42" stroke="#33407e" stroke-width="1.4" opacity="0.6"/>
+            <circle cx="22" cy="24" r="2.6" fill="#5B7CFA"/>
             <circle cx="31" cy="16" r="3.4" fill="#FF5D62"/>
           </svg>
-          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:#E7EEF2;">Vigie</span>
+          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:#E7E9F5;">Vigie</span>
         </div>
         <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.16em;
                     text-transform:uppercase;color:#8AA1A9;margin:0 0 8px 2px;">L'œil sur ton risque</div>

@@ -16,6 +16,8 @@ import streamlit as st
 from src import behavior as B
 from src import constants as C
 from src import service
+from src import theme as TH
+
 conn = st.session_state.get("_conn") or service.connect()
 account_id = st.session_state.get("account_id", 1)
 account, rules, trades, adjustments, rs, now = service.evaluate_now(conn, account_id=account_id)
@@ -81,7 +83,7 @@ with c1:
     st.subheader("Performance par heure")
     by_hour = df.groupby("heure").agg(R_moyen=("R", "mean"), trades=("R", "count")).reset_index()
     st.altair_chart(
-        alt.Chart(by_hour).mark_bar(color="#4c9be8")
+        alt.Chart(by_hour).mark_bar(color=TH.ACCENT)
         .encode(x=alt.X("heure:O", title="Heure (locale)"), y="R_moyen:Q",
                 tooltip=["heure", "R_moyen", "trades"]).properties(height=240),
         use_container_width=True)
@@ -89,7 +91,7 @@ with c2:
     st.subheader("Performance par jour")
     by_day = df.groupby("jour").agg(R_moyen=("R", "mean"), trades=("R", "count")).reset_index()
     st.altair_chart(
-        alt.Chart(by_day).mark_bar(color="#9b6ce8")
+        alt.Chart(by_day).mark_bar(color=TH.ACCENT)
         .encode(x=alt.X("jour:N", sort=None), y="R_moyen:Q",
                 tooltip=["jour", "R_moyen", "trades"]).properties(height=240),
         use_container_width=True)

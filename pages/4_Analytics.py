@@ -14,6 +14,7 @@ import streamlit as st
 from src import constants as C
 from src import repository as R
 from src import service
+from src import theme as TH
 from components import risk_meters as RM
 
 conn = st.session_state.get("_conn") or service.connect()
@@ -88,7 +89,7 @@ eq = view.sort_values("closed_at").copy()
 eq["équité"] = eq["pnl"].cumsum()
 equity_chart = (
     alt.Chart(eq)
-    .mark_line(point=True, color="#2ecc71")
+    .mark_line(point=alt.OverlayMarkDef(color=TH.ACCENT), color=TH.ACCENT)
     .encode(x=alt.X("closed_at:T", title="Date de clôture"),
             y=alt.Y("équité:Q", title=f"P&L cumulé ({cur})"),
             tooltip=["id", "instrument", "pnl", "R", "équité"])
@@ -121,7 +122,7 @@ with c_right:
           .agg(pnl=("pnl", "sum"), trades=("id", "count")).reset_index())
     mk_chart = (
         alt.Chart(mk)
-        .mark_bar(color="#4c9be8")
+        .mark_bar(color=TH.ACCENT)
         .encode(x=alt.X("marché:N"), y=alt.Y("pnl:Q", title=f"P&L ({cur})"),
                 tooltip=["marché", "pnl", "trades"])
         .properties(height=260)

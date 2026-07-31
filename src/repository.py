@@ -107,6 +107,18 @@ def apply_risk_profile(conn: sqlite3.Connection, account_id: int, profile: str) 
             save_rule(conn, rule, account_id=account_id)
 
 
+def apply_custom_risk(conn: sqlite3.Connection, account_id: int,
+                      daily_loss_pct: float, per_trade_pct: float) -> None:
+    """Fixe directement les deux limites clés (perte max/jour, risque max/trade) en %."""
+    targets = {C.RULE_DAILY_LOSS: daily_loss_pct, C.RULE_PER_TRADE_RISK: per_trade_pct}
+    for rule in load_rules(conn, account_id):
+        if rule.rule_type in targets:
+            rule.enabled = True
+            rule.threshold_value = targets[rule.rule_type]
+            rule.threshold_unit = C.UNIT_PCT
+            save_rule(conn, rule, account_id=account_id)
+
+
 def save_account(conn: sqlite3.Connection, a: E.Account) -> None:
     conn.execute(
         """UPDATE accounts SET name=?, kind=?, base_currency=?, initial_balance=?,

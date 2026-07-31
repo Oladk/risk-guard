@@ -31,10 +31,17 @@ def render(conn, account) -> None:
         ccy = c2.text_input("Devise", value=account.base_currency)
         tz = c3.selectbox("Fuseau horaire", _TIMEZONES, index=tz_index)
 
-        profile = st.radio("Choisis ton profil de risque", list(C.RISK_PROFILES.keys()),
+        profile = st.radio("Choisis ton profil de risque",
+                           list(C.RISK_PROFILES.keys()) + ["Personnalisé"],
                            index=1, horizontal=True)
         for name, desc in _PROFILE_HELP.items():
             st.caption(f"**{name}** — {desc}")
+        st.caption("**Personnalisé** — fixe toi-même tes deux limites clés ci-dessous.")
+        pc1, pc2 = st.columns(2)
+        custom_daily = pc1.number_input("Perso · perte max / jour (%)", min_value=0.0,
+                                        value=3.0, step=0.5)
+        custom_trade = pc2.number_input("Perso · risque max / trade (%)", min_value=0.0,
+                                        value=1.0, step=0.25)
 
         col_go, col_skip = st.columns([2, 1])
         go = col_go.form_submit_button("C'est parti 🚀", type="primary")
@@ -45,7 +52,10 @@ def render(conn, account) -> None:
         account.base_currency = ccy.strip() or "XOF"
         account.timezone = tz
         R.save_account(conn, account)
-        R.apply_risk_profile(conn, account.id, profile)
+        if profile == "Personnalisé":
+            R.apply_custom_risk(conn, account.id, custom_daily / 100, custom_trade / 100)
+        else:
+            R.apply_risk_profile(conn, account.id, profile)
         R.mark_onboarded(conn, account.id)
         st.rerun()
     elif skip:

@@ -40,8 +40,24 @@ conn = service.connect()
 shell.start(conn)
 
 with st.sidebar:
-    st.markdown("## 🔭 Vigie")
-    st.caption("L'œil sur ton risque.")
+    st.markdown(
+        """
+        <div style="display:flex;align-items:center;gap:11px;margin:2px 0 2px;">
+          <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="22" cy="24" r="18" fill="none" stroke="#0E7C90" stroke-width="2"/>
+            <circle cx="22" cy="24" r="10" fill="none" stroke="#2CC5DE" stroke-width="2"/>
+            <line x1="4" y1="24" x2="40" y2="24" stroke="#0E7C90" stroke-width="1.4" opacity="0.5"/>
+            <line x1="22" y1="6" x2="22" y2="42" stroke="#0E7C90" stroke-width="1.4" opacity="0.5"/>
+            <circle cx="22" cy="24" r="2.6" fill="#2CC5DE"/>
+            <circle cx="31" cy="16" r="3.4" fill="#FF5D62"/>
+          </svg>
+          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:#E7EEF2;">Vigie</span>
+        </div>
+        <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.16em;
+                    text-transform:uppercase;color:#8AA1A9;margin:0 0 8px 2px;">L'œil sur ton risque</div>
+        """,
+        unsafe_allow_html=True,
+    )
     account_id = account_selector.render(conn)
     shell.sidebar_user_controls()
 
@@ -170,16 +186,16 @@ if rs.open_risk > 0:
 with st.expander("⚡ Saisie éclair — loguer un trade en quelques secondes"):
     st.caption("À chaque position que tu ouvres chez ton broker, note-la ici. "
                "L'outil calcule ton risque et te prévient si tu approches une limite.")
-    with st.form("quick_open", clear_on_submit=True):
-        q1, q2, q3, q4 = st.columns([2.2, 1.2, 1.2, 1.2])
-        q_instr = q1.text_input("Instrument", value="EURUSD")
-        q_dir = q2.selectbox("Sens", C.DIRECTIONS,
-                             format_func=lambda d: C.DIRECTION_LABELS[d], help=C.HELP_SENS)
-        q_risk = q3.number_input("Risque %", min_value=0.0, value=1.0, step=0.25,
-                                 help=C.HELP_RISQUE)
-        q3.caption(f"≈ {RM.format_money(dsb * q_risk / 100, cur)}")
-        q4.write("")
-        q_go = q4.form_submit_button("Ouvrir", type="primary", use_container_width=True)
+    # Saisie hors formulaire → le montant se recalcule EN DIRECT quand tu changes le risque.
+    q1, q2, q3, q4 = st.columns([2.2, 1.2, 1.2, 1.2])
+    q_instr = q1.text_input("Instrument", value="EURUSD", key="qe_instr")
+    q_dir = q2.selectbox("Sens", C.DIRECTIONS, format_func=lambda d: C.DIRECTION_LABELS[d],
+                         help=C.HELP_SENS, key="qe_dir")
+    q_risk = q3.number_input("Risque %", min_value=0.0, value=1.0, step=0.25,
+                             help=C.HELP_RISQUE, key="qe_risk")
+    q3.caption(f"≈ **{RM.format_money(dsb * q_risk / 100, cur)}** sur {RM.format_money(dsb, cur)}")
+    q4.write("")
+    q_go = q4.button("Ouvrir", type="primary", use_container_width=True, key="qe_go")
     if q_go:
         q_pct = q_risk / 100.0
         chk = E.check_new_trade(account, rules, trades, adjustments, now, dsb * q_pct)

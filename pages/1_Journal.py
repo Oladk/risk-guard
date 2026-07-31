@@ -60,6 +60,12 @@ else:
     prefill = st.session_state.get("prefill", {})
     checklist_items = R.load_checklist(conn, account.id, only_enabled=True)
 
+    # Unité hors formulaire → le champ de risque bascule %/R en direct.
+    unit = st.radio("Unité de risque", [C.UNIT_PCT, C.UNIT_R],
+                    index=0 if default_unit == C.UNIT_PCT else 1, horizontal=True,
+                    format_func=lambda u: "% du capital" if u == C.UNIT_PCT else "R (multiple)",
+                    key="journal_unit")
+
     with st.form("open_form", clear_on_submit=True):
         c1, c2, c3 = st.columns(3)
         instrument = c1.text_input("Instrument", value=prefill.get("instrument", "EURUSD"))
@@ -68,16 +74,13 @@ else:
         direction = c3.selectbox("Sens", C.DIRECTIONS,
                                  format_func=lambda d: C.DIRECTION_LABELS[d], help=C.HELP_SENS)
 
-        c4, c5 = st.columns(2)
-        unit = c4.radio("Unité de risque", [C.UNIT_PCT, C.UNIT_R],
-                        index=0 if default_unit == C.UNIT_PCT else 1, horizontal=True)
         if unit == C.UNIT_PCT:
-            risk_val = c5.number_input("Risque (% du capital)", min_value=0.0,
+            risk_val = st.number_input("Risque (% du capital)", min_value=0.0,
                                        value=float(prefill.get("risk_pct", 1.0)),
                                        step=0.25, format="%.2f", help=C.HELP_RISQUE)
             risk_pct = risk_val / 100.0
         else:
-            risk_val = c5.number_input("Risque (en R)", min_value=0.0,
+            risk_val = st.number_input("Risque (en R)", min_value=0.0,
                                        value=float(prefill.get("risk_r", 1.0)),
                                        step=0.25, format="%.2f", help=C.HELP_RISQUE)
             risk_pct = risk_val * account.one_R_pct

@@ -168,6 +168,15 @@ def test_create_account_seeds_tilt_config():
     assert R.load_tilt_config(conn, aid).tilt_threshold == C.DEFAULT_TILT["tilt_threshold"]
 
 
+def test_apply_custom_risk():
+    conn = fresh_conn()
+    R.apply_custom_risk(conn, 1, 0.025, 0.008)
+    rules = {r.rule_type: r for r in R.load_rules(conn, 1)}
+    assert rules[C.RULE_DAILY_LOSS].threshold_value == 0.025
+    assert rules[C.RULE_DAILY_LOSS].enabled is True
+    assert rules[C.RULE_PER_TRADE_RISK].threshold_value == 0.008
+
+
 def test_onboarding_flag_and_risk_profile():
     conn = fresh_conn()
     assert R.is_onboarded(conn, 1) is False  # compte neuf

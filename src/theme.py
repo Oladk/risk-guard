@@ -21,6 +21,8 @@ _PALETTES = {
         "text": "#E7E9F5",
         "muted": "#9fb0b8",
         "muted_soft": "#c8d2d8",
+        "card": "#151B40",        # fond de carte / ligne de position
+        "border": "#2A3566",      # filet
         "track": "#2b2f3a",       # fond de barre de jauge
         "logo_ring": "#33407e",   # anneaux/croix du radar
         "logo_text": "#E7E9F5",
@@ -35,6 +37,8 @@ _PALETTES = {
         "text": "#1A1E3C",
         "muted": "#5b6472",
         "muted_soft": "#3a4250",
+        "card": "#FFFFFF",
+        "border": "#D5DAF0",
         "track": "#DDE1F0",
         "logo_ring": "#C3C9E8",
         "logo_text": "#1A1E3C",

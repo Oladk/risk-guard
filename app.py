@@ -97,23 +97,8 @@ def cockpit():
     cur = acc.base_currency
     dsb = rs.day_start_balance
 
-    if rs.locked:
-        status_txt = "🔴 STOP (mode strict)"
-    else:
-        status_txt = {
-            C.LEVEL_OK: "🟢 Sous contrôle",
-            C.LEVEL_WARN: "🟠 Vigilance",
-            C.LEVEL_BLOCK: "🔴 Limite atteinte",
-        }[rs.global_level]
-
-    top_l, top_r = st.columns([3, 1])
-    top_l.title("Cockpit de risque")
-    top_r.markdown(
-        f"<div style='text-align:right;font-size:1.4rem;font-weight:700;margin-top:18px;'>"
-        f"{status_txt}</div>", unsafe_allow_html=True)
-
-    st.caption("🔭 **Vigie** surveille ton risque et t'alerte quand tu approches tes limites — "
-               "tu gardes toujours la main.")
+    st.title("Cockpit de risque")
+    RM.render_status_band(rs, acc, dsb, cur)
 
     with st.expander("❓ Comment ça marche (à lire une fois)", expanded=(len(trades) == 0)):
         st.markdown(
@@ -166,13 +151,10 @@ def cockpit():
             </div>
             """, unsafe_allow_html=True)
 
-    m1, m2, m3, m4 = st.columns(4)
+    m1, m2, m3 = st.columns(3)
     m1.metric("Solde début de journée", RM.format_money(dsb, cur))
     m2.metric("P&L réalisé (jour)", RM.format_money(rs.realized_pnl_today, cur))
     m3.metric("Risque ouvert", RM.format_money(rs.open_risk, cur))
-    m4.metric("Perte potentielle (jour)",
-              RM.format_money(max(rs.worst_case_drawdown_today, 0.0), cur),
-              help="Pertes réalisées + risque des positions ouvertes (worst-case).")
 
     if rs.open_risk > 0:
         eff = CO.effective_open_risk(trades, CO.load_correlations(conn))
@@ -183,7 +165,8 @@ def cockpit():
             f"({ratio*100:.0f}% — {'diversifié' if ratio < 0.98 else 'concentré/corrélé'})."
         )
 
-    with st.expander("⚡ Saisie éclair — loguer un trade en quelques secondes"):
+    with st.container(border=True):
+        st.markdown("**⚡ Saisie éclair** — loguer un trade en quelques secondes")
         st.caption("À chaque position que tu ouvres chez ton broker, note-la ici. "
                    "L'outil calcule ton risque et te prévient si tu approches une limite.")
         q1, q2, q3, q4 = st.columns([2.2, 1.2, 1.2, 1.2])
@@ -237,13 +220,7 @@ def cockpit():
         st.info("Aucune position ouverte.")
     else:
         for t in open_positions:
-            risk_disp = RM.format_money(t.planned_risk_amount, cur)
-            st.markdown(
-                f"**#{t.id} · {t.instrument}** "
-                f"({t.market}, {C.DIRECTION_LABELS.get(t.direction, t.direction)}) — "
-                f"risque {risk_disp} · {t.planned_risk_pct*100:.2f}% · {t.planned_risk_R:.2f}R"
-                + (f" · 🏷️ {t.emotion_tag}" if t.emotion_tag else "")
-            )
+            RM.render_position(t, cur)
 
         st.markdown("##### Clôturer une position")
         st.caption("La clôture reste possible même en mode STOP — le journal doit rester juste.")

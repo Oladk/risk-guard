@@ -14,17 +14,10 @@ import streamlit as st
 from src import constants as C
 from src import repository as R
 from src import service
-from components import account_selector
 from components import risk_meters as RM
-from components import shell
 
-st.set_page_config(page_title="Analytics", page_icon="📊", layout="wide")
-
-conn = service.connect()
-shell.start(conn)
-with st.sidebar:
-    account_id = account_selector.render(conn)
-    shell.sidebar_user_controls()
+conn = st.session_state.get("_conn") or service.connect()
+account_id = st.session_state.get("account_id", 1)
 account, rules, trades, adjustments, rs, now = service.evaluate_now(conn, account_id=account_id)
 cur = account.base_currency
 

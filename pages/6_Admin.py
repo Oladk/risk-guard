@@ -15,12 +15,8 @@ import streamlit as st
 from src import auth
 from src import service
 from src import time_utils as T
-from components import shell
 
-st.set_page_config(page_title="Admin — Vigie", page_icon="🛠️", layout="wide")
-
-conn = service.connect()
-shell.start(conn)
+conn = st.session_state.get("_conn") or service.connect()
 
 if not auth.is_admin(conn):
     st.error("🔒 Page réservée à l'administrateur.")

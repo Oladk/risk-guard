@@ -50,3 +50,14 @@ def test_user_account_isolation():
 
 def test_auth_not_required_by_default():
     assert auth.is_auth_required() is False
+
+
+def test_is_admin_true_in_local_mode(monkeypatch):
+    """En local (pas d'auth), le propriétaire est admin -> la page Admin apparaît.
+
+    Court-circuite avant tout accès à st.session_state : testable hors contexte
+    Streamlit. C'est ce que teste le routeur pour afficher/masquer l'onglet Admin.
+    """
+    monkeypatch.delenv("RISK_REQUIRE_AUTH", raising=False)
+    conn = fresh()
+    assert auth.is_admin(conn) is True

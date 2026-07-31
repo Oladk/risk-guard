@@ -15,10 +15,8 @@ from src import notify as N
 from src import repository as R
 from src import risk_engine as E
 from src import service
-from components import account_selector
 from components import alert_overlay as AO
 from components import risk_meters as RM
-from components import shell
 
 
 def _push_notification(kind: str, lines: list[str]) -> None:
@@ -31,13 +29,8 @@ def _push_notification(kind: str, lines: list[str]) -> None:
     subject, body = N.build_message(kind, lines)
     N.notify(subject, body, email_cfg, ntfy_cfg)
 
-st.set_page_config(page_title="Journal", page_icon="📓", layout="wide")
-
-conn = service.connect()
-shell.start(conn)
-with st.sidebar:
-    account_id = account_selector.render(conn)
-    shell.sidebar_user_controls()
+conn = st.session_state.get("_conn") or service.connect()
+account_id = st.session_state.get("account_id", 1)
 account, rules, trades, adjustments, rs, now = service.evaluate_now(conn, account_id=account_id)
 cur = account.base_currency
 dsb = rs.day_start_balance

@@ -35,11 +35,14 @@ def format_local_time(dt: datetime | None, tz: str) -> str:
     return local.strftime("%d/%m %H:%M")
 
 
-def _bar_html(label: str, detail: str, ratio: float, color: str) -> str:
+def _bar_html(label: str, detail: str, ratio: float, color: str, dim: bool = False) -> str:
     pct = int(min(max(ratio, 0.0), 1.0) * 100)
     p = TH.pal()
+    # En cas de limite franchie ailleurs, les jauges « OK » sont estompées pour
+    # ne pas rivaliser visuellement avec le rouge (retour pilote : vert à côté du rouge).
+    opacity = "opacity:0.4;" if dim else ""
     return f"""
-    <div style="margin-bottom:14px;">
+    <div style="margin-bottom:14px;{opacity}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;
                   font-size:0.9rem;margin-bottom:4px;">
         <span style="color:{p['muted_soft']};">{label}</span>
@@ -52,9 +55,13 @@ def _bar_html(label: str, detail: str, ratio: float, color: str) -> str:
     </div>"""
 
 
-def render_rule_gauge(state: E.RuleState, account: E.Account, base_balance: float) -> None:
+SEVERITY_RANK = {C.LEVEL_BLOCK: 0, C.LEVEL_WARN: 1, C.LEVEL_OK: 2}
+
+
+def render_rule_gauge(state: E.RuleState, account: E.Account, base_balance: float,
+                      dim: bool = False) -> None:
     """Affiche une jauge pour une règle. Les règles COUNT montrent n/N ;
-    les règles monétaires montrent le % consommé."""
+    les règles monétaires montrent le % consommé. `dim` estompe la jauge."""
     color = LEVEL_COLORS[state.level]
     ratio = state.ratio if state.ratio is not None else 0.0
 
@@ -71,4 +78,4 @@ def render_rule_gauge(state: E.RuleState, account: E.Account, base_balance: floa
             detail = f"{consumed_pct:.2f}% / {limit_pct:.2f}%"
 
     label = f"{LEVEL_ICONS[state.level]} {state.label}"
-    st.markdown(_bar_html(label, detail, ratio, color), unsafe_allow_html=True)
+    st.markdown(_bar_html(label, detail, ratio, color, dim=dim), unsafe_allow_html=True)

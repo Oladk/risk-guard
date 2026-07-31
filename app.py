@@ -217,11 +217,17 @@ def cockpit():
     st.subheader("Limites de risque")
     if not rs.rule_states:
         st.info("Aucune règle active. Configure tes limites dans **Règles & compte**.")
-    for s in rs.rule_states:
-        if s.rule_type == C.RULE_PER_TRADE_RISK:
+    else:
+        gauges = [s for s in rs.rule_states if s.rule_type != C.RULE_PER_TRADE_RISK]
+        per_trade = [s for s in rs.rule_states if s.rule_type == C.RULE_PER_TRADE_RISK]
+        # Les limites atteintes (rouge) puis en approche (orange) remontent en tête ;
+        # quand une limite est franchie, les jauges vertes sont estompées (retour pilote).
+        gauges.sort(key=lambda s: RM.SEVERITY_RANK.get(s.level, 3))
+        breach = any(s.level == C.LEVEL_BLOCK for s in gauges)
+        for s in gauges:
+            RM.render_rule_gauge(s, acc, dsb, dim=(breach and s.level == C.LEVEL_OK))
+        for s in per_trade:
             st.caption(f"ℹ️ {s.message}")
-        else:
-            RM.render_rule_gauge(s, acc, dsb)
 
     st.divider()
 

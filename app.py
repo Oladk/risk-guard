@@ -23,6 +23,7 @@ from src import db as DB
 from src import repository as R
 from src import risk_engine as E
 from src import service
+from src import theme as TH
 from src import time_utils as T
 from src.brokers import sync as SY
 from src.brokers.mt5 import MT5Connector
@@ -46,21 +47,22 @@ st.session_state["_conn"] = conn  # réutilisée par les pages (1 connexion/reru
 shell.start(conn)  # gate d'authentification (mode cloud) + PWA + CSS mobile
 
 with st.sidebar:
+    _lp = TH.pal()
     st.markdown(
-        """
+        f"""
         <div style="display:flex;align-items:center;gap:11px;margin:2px 0 2px;">
           <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true">
-            <circle cx="22" cy="24" r="18" fill="none" stroke="#33407e" stroke-width="2"/>
-            <circle cx="22" cy="24" r="10" fill="none" stroke="#5B7CFA" stroke-width="2"/>
-            <line x1="4" y1="24" x2="40" y2="24" stroke="#33407e" stroke-width="1.4" opacity="0.6"/>
-            <line x1="22" y1="6" x2="22" y2="42" stroke="#33407e" stroke-width="1.4" opacity="0.6"/>
-            <circle cx="22" cy="24" r="2.6" fill="#5B7CFA"/>
+            <circle cx="22" cy="24" r="18" fill="none" stroke="{_lp['logo_ring']}" stroke-width="2"/>
+            <circle cx="22" cy="24" r="10" fill="none" stroke="{TH.ACCENT}" stroke-width="2"/>
+            <line x1="4" y1="24" x2="40" y2="24" stroke="{_lp['logo_ring']}" stroke-width="1.4" opacity="0.6"/>
+            <line x1="22" y1="6" x2="22" y2="42" stroke="{_lp['logo_ring']}" stroke-width="1.4" opacity="0.6"/>
+            <circle cx="22" cy="24" r="2.6" fill="{TH.ACCENT}"/>
             <circle cx="31" cy="16" r="3.4" fill="#FF5D62"/>
           </svg>
-          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:#E7E9F5;">Vigie</span>
+          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:{_lp['logo_text']};">Vigie</span>
         </div>
         <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.16em;
-                    text-transform:uppercase;color:#8AA1A9;margin:0 0 8px 2px;">L'œil sur ton risque</div>
+                    text-transform:uppercase;color:{_lp['logo_sub']};margin:0 0 8px 2px;">L'œil sur ton risque</div>
         """,
         unsafe_allow_html=True,
     )
@@ -147,6 +149,7 @@ def cockpit():
     if tilt.level != "CALME":
         _color = "#FF5D62" if tilt.level == "TILT" else "#F5B23D"
         _icon = "🔴" if tilt.level == "TILT" else "🟠"
+        _tp = TH.pal()
         _items = "".join(f"<li style='margin:2px 0;'>{s.label} — {s.detail}</li>"
                          for s in tilt.signals)
         st.markdown(
@@ -156,10 +159,10 @@ def cockpit():
               <div style="color:{_color};font-weight:700;font-size:1.05rem;">
                 {_icon} Alerte comportementale — {tilt.level} (score {tilt.score}/100)
               </div>
-              <div style="color:#9fb0b8;font-size:0.9rem;margin-top:4px;">
+              <div style="color:{_tp['muted']};font-size:0.9rem;margin-top:4px;">
                 Tes patterns ressemblent à du tilt. Respire, respecte ton plan.
               </div>
-              <ul style="color:#c8d2d8;margin:8px 0 0 0;">{_items}</ul>
+              <ul style="color:{_tp['muted_soft']};margin:8px 0 0 0;">{_items}</ul>
             </div>
             """, unsafe_allow_html=True)
 

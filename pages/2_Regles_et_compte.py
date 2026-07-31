@@ -187,7 +187,8 @@ with st.form("rules_form"):
             format_func=lambda x: "Alerte" if x == "WARN" else "Blocage (strict)",
             key=f"act_{kp}")
         new_values[rt] = (enabled, value, unit, action)
-        st.markdown("<hr style='margin:6px 0;border-color:#2b2f3a;'>", unsafe_allow_html=True)
+        st.markdown("<hr style='margin:6px 0;border:none;border-top:1px solid rgba(128,128,128,0.25);'>",
+                    unsafe_allow_html=True)
 
     if st.form_submit_button("💾 Enregistrer les règles", type="primary"):
         for rule in rules:

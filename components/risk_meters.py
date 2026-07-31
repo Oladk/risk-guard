@@ -9,6 +9,7 @@ import streamlit as st
 
 from src import constants as C
 from src import risk_engine as E
+from src import theme as TH
 
 LEVEL_COLORS = {
     C.LEVEL_OK: "#2ecc71",
@@ -36,14 +37,15 @@ def format_local_time(dt: datetime | None, tz: str) -> str:
 
 def _bar_html(label: str, detail: str, ratio: float, color: str) -> str:
     pct = int(min(max(ratio, 0.0), 1.0) * 100)
+    p = TH.pal()
     return f"""
     <div style="margin-bottom:14px;">
       <div style="display:flex;justify-content:space-between;align-items:baseline;
                   font-size:0.9rem;margin-bottom:4px;">
-        <span style="color:#c8cdd8;">{label}</span>
+        <span style="color:{p['muted_soft']};">{label}</span>
         <span style="color:{color};font-weight:600;">{detail}</span>
       </div>
-      <div style="background:#2b2f3a;border-radius:6px;height:11px;overflow:hidden;">
+      <div style="background:{p['track']};border-radius:6px;height:11px;overflow:hidden;">
         <div style="width:{pct}%;height:100%;background:{color};
                     transition:width .35s ease;"></div>
       </div>

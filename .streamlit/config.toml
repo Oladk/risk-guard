@@ -1,11 +1,27 @@
-# Vigie — DA « poste de veille » : fond nuit indigo, accent bleu périwinkle.
+# Vigie — DA « poste de veille ».
+# Sombre = signature (indigo-nuit). Clair = variante native (Streamlit 1.46+ :
+# [theme.light]/[theme.dark] basculent selon le réglage système, l'utilisateur
+# pouvant forcer l'un ou l'autre via ☰ → Settings → Theme).
 [theme]
-base = "dark"
+base = "dark"                 # défaut quand la préférence système est inconnue
+font = "sans serif"
+primaryColor = "#5B7CFA"
+
+# --- Signature sombre (indigo-nuit) -----------------------------------------
+[theme.dark]
 primaryColor = "#5B7CFA"
 backgroundColor = "#0E1330"
 secondaryBackgroundColor = "#171E45"
 textColor = "#E7E9F5"
-font = "sans serif"
+borderColor = "#2A3566"
+
+# --- Variante claire (indigo tamisé, non stark) -----------------------------
+[theme.light]
+primaryColor = "#4A5FE0"
+backgroundColor = "#F7F8FD"
+secondaryBackgroundColor = "#E9ECF8"
+textColor = "#1A1E3C"
+borderColor = "#D5DAF0"
 
 [server]
 headless = true

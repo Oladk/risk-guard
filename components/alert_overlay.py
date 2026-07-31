@@ -6,6 +6,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from src import risk_engine as E
+from src import theme as TH
 from .risk_meters import format_local_time
 
 # Bordure rouge pulsante autour de tout l'écran (pointer-events:none pour ne PAS
@@ -70,7 +71,7 @@ def render_warning(risk_state: E.RiskState) -> None:
           <div style="color:#f39c12;font-weight:700;font-size:1.05rem;">
             ⚠️ Zone d'avertissement — tu approches une limite
           </div>
-          <ul style="color:#e8c98a;margin:8px 0 0 0;">{items}</ul>
+          <ul style="color:{TH.pal()['warn_list']};margin:8px 0 0 0;">{items}</ul>
         </div>
         """,
         unsafe_allow_html=True,
@@ -85,6 +86,7 @@ def render_alerts(risk_state: E.RiskState, sound: bool = True) -> None:
     if reached:
         items = "".join(f"<li style='margin:3px 0;'>{s.label} — {s.message}</li>"
                         for s in reached)
+        _dl = TH.pal()["danger_list"]
         st.markdown(
             f"""
             <div style="background:rgba(230,57,70,0.14);border-left:6px solid #e63946;
@@ -92,10 +94,10 @@ def render_alerts(risk_state: E.RiskState, sound: bool = True) -> None:
               <div style="color:#e63946;font-weight:800;font-size:1.12rem;">
                 🔴 Limite(s) atteinte(s) — à toi de décider
               </div>
-              <div style="color:#f0c3c7;font-size:0.9rem;margin-top:2px;">
+              <div style="color:{_dl};font-size:0.9rem;margin-top:2px;">
                 L'outil t'alerte, il ne bloque pas. Reprends la main sur ton risque.
               </div>
-              <ul style="color:#f3d5d8;margin:8px 0 0 0;">{items}</ul>
+              <ul style="color:{_dl};margin:8px 0 0 0;">{items}</ul>
             </div>
             """,
             unsafe_allow_html=True,
@@ -140,13 +142,14 @@ def play_alert_sound(level: str) -> None:
 
 def enable_sound_button() -> None:
     """Bouton discret qui « débloque » l'audio du navigateur via un geste utilisateur."""
+    p = TH.pal()
     components.html(
-        """
-        <button onclick="(function(){try{const C=window.AudioContext||window.webkitAudioContext;
+        f"""
+        <button onclick="(function(){{try{{const C=window.AudioContext||window.webkitAudioContext;
           const c=new C();const o=c.createOscillator();const g=c.createGain();
-          o.connect(g);g.connect(c.destination);g.gain.value=0.0001;o.start();o.stop(c.currentTime+0.05);}catch(e){}})()"
-          style="width:100%;padding:8px;border-radius:8px;border:1px solid #3a3f4b;
-                 background:#1a1d29;color:#c8cdd8;cursor:pointer;font-size:0.85rem;">
+          o.connect(g);g.connect(c.destination);g.gain.value=0.0001;o.start();o.stop(c.currentTime+0.05);}}catch(e){{}}}})()"
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid {p['btn_border']};
+                 background:{p['btn_bg']};color:{p['btn_text']};cursor:pointer;font-size:0.85rem;">
           🔊 Activer le son des alertes
         </button>
         """,

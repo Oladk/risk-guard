@@ -12,6 +12,7 @@ import streamlit as st
 from src import behavior as B
 from src import constants as C
 from src import correlation as CO
+from src import db as DB
 from src import fx
 from src import repository as R
 from src import risk_engine as E
@@ -96,20 +97,27 @@ with st.form("account_form"):
     sound_enabled = a9.checkbox("🔊 Son des alertes", value=account.sound_enabled)
     notify_enabled = a10.checkbox("📱 Notifications externes", value=account.notify_enabled)
 
-    st.markdown("**Connexion broker MT5 (optionnel)** — le terminal MT5 doit être ouvert "
-                "et connecté au compte.")
-    k1, k2 = st.columns(2)
-    kind = k1.selectbox("Type de compte", ["MANUAL", "MT5"],
-                        index=0 if account.kind != "MT5" else 1)
-    enforce_enabled = k2.checkbox("⚡ Enforcement : fermer les positions au blocage",
-                                  value=account.enforce_enabled,
-                                  help="Si activé, tu pourras fermer toutes les positions "
-                                       "MT5 d'un clic quand une limite verrouillante est atteinte.")
-    m1, m2, m3 = st.columns(3)
-    mt5_login = m1.number_input("MT5 login (optionnel)", min_value=0,
-                                value=int(account.mt5_login or 0), step=1)
-    mt5_server = m2.text_input("MT5 serveur (optionnel)", value=account.mt5_server)
-    mt5_path = m3.text_input("Chemin terminal MT5 (optionnel)", value=account.mt5_path)
+    if DB.is_postgres():
+        st.caption("🔒 **Synchronisation MT5 : à venir.** Elle nécessite un poste Windows avec le "
+                   "terminal MetaTrader 5 ouvert — indisponible sur la version en ligne pour l'instant.")
+        kind = account.kind
+        enforce_enabled = account.enforce_enabled
+        mt5_login, mt5_server, mt5_path = account.mt5_login, account.mt5_server, account.mt5_path
+    else:
+        st.markdown("**Connexion broker MT5 (optionnel)** — le terminal MT5 doit être ouvert "
+                    "et connecté au compte.")
+        k1, k2 = st.columns(2)
+        kind = k1.selectbox("Type de compte", ["MANUAL", "MT5"],
+                            index=0 if account.kind != "MT5" else 1)
+        enforce_enabled = k2.checkbox("⚡ Enforcement : fermer les positions au blocage",
+                                      value=account.enforce_enabled,
+                                      help="Si activé, tu pourras fermer toutes les positions "
+                                           "MT5 d'un clic quand une limite verrouillante est atteinte.")
+        m1, m2, m3 = st.columns(3)
+        mt5_login = m1.number_input("MT5 login (optionnel)", min_value=0,
+                                    value=int(account.mt5_login or 0), step=1)
+        mt5_server = m2.text_input("MT5 serveur (optionnel)", value=account.mt5_server)
+        mt5_path = m3.text_input("Chemin terminal MT5 (optionnel)", value=account.mt5_path)
 
     if st.form_submit_button("💾 Enregistrer le compte", type="primary"):
         R.save_account(conn, E.Account(

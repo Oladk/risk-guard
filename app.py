@@ -19,9 +19,12 @@ from src import repository as R
 from src import risk_engine as E
 from src import behavior as B
 from src import correlation as CO
+from src import db as DB
 from src import risk_engine as E
 from src import service
 from src import time_utils as T
+
+MT5_AVAILABLE = not DB.is_postgres()  # MT5 = terminal Windows local uniquement (pas en ligne)
 from src.brokers import sync as SY
 from src.brokers.mt5 import MT5Connector
 from components import account_selector
@@ -76,7 +79,7 @@ with st.sidebar:
                f"unité **{account.preferred_unit}**")
     if account.sound_enabled:
         AO.enable_sound_button()
-    if account.kind == "MT5":
+    if account.kind == "MT5" and MT5_AVAILABLE:
         if st.button("🔄 Synchroniser MT5", use_container_width=True):
             try:
                 res = SY.sync_account(conn, account, _mt5_connector(account), now)
@@ -128,7 +131,7 @@ with st.expander("❓ Comment ça marche (à lire une fois)", expanded=(len(trad
 if rs.locked:
     # Mode strict (le trader a passé une règle en BLOCK) : refus + STOP.
     AO.render_stop(rs, account)
-    if account.kind == "MT5" and account.enforce_enabled:
+    if account.kind == "MT5" and account.enforce_enabled and MT5_AVAILABLE:
         st.error("⚡ **Enforcement disponible** — tu peux fermer toutes tes positions MT5 maintenant.")
         confirm = st.checkbox("Je confirme vouloir fermer TOUTES mes positions MT5")
         if confirm and st.button("⚡ Fermer toutes les positions MT5", type="primary"):

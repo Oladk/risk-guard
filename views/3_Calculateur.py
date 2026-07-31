@@ -77,4 +77,4 @@ if "last_sizing" in st.session_state:
     st.divider()
     if st.button("➡️ Utiliser ces paramètres dans un nouveau trade"):
         st.session_state["prefill"] = st.session_state["last_sizing"]
-        st.switch_page("pages/1_Journal.py")
+        st.switch_page("views/1_Journal.py")

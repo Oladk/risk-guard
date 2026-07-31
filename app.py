@@ -2,7 +2,8 @@
 
 `app.py` gère la navigation (`st.navigation`), la barre latérale commune (logo,
 sélecteur de compte, déconnexion), le gate d'authentification et l'onboarding.
-Le cockpit est défini ici comme une page ; les autres pages vivent dans `pages/`.
+Le cockpit est défini ici comme une page ; les autres pages vivent dans `views/`
+(hors du dossier magique `pages/` que st.navigation ne doit pas utiliser).
 La page Admin n'est proposée qu'aux administrateurs.
 """
 
@@ -239,13 +240,13 @@ def cockpit():
 
 _pages = [
     st.Page(cockpit, title="Cockpit", icon="🔭", default=True),
-    st.Page("pages/1_Journal.py", title="Journal", icon="📓"),
-    st.Page("pages/2_Regles_et_compte.py", title="Règles & compte", icon="⚙️"),
-    st.Page("pages/3_Calculateur.py", title="Calculateur", icon="🧮"),
-    st.Page("pages/4_Analytics.py", title="Analytics", icon="📊"),
-    st.Page("pages/5_Coach.py", title="Coach", icon="🧠"),
+    st.Page("views/1_Journal.py", title="Journal", icon="📓"),
+    st.Page("views/2_Regles_et_compte.py", title="Règles & compte", icon="⚙️"),
+    st.Page("views/3_Calculateur.py", title="Calculateur", icon="🧮"),
+    st.Page("views/4_Analytics.py", title="Analytics", icon="📊"),
+    st.Page("views/5_Coach.py", title="Coach", icon="🧠"),
 ]
 if auth.is_admin(conn):
-    _pages.append(st.Page("pages/6_Admin.py", title="Admin", icon="🛠️"))
+    _pages.append(st.Page("views/6_Admin.py", title="Admin", icon="🛠️"))
 
 st.navigation(_pages).run()

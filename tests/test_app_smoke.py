@@ -41,22 +41,22 @@ def test_cockpit_runs_after_onboarding(tmp_path):
 
 
 def test_journal_runs_without_exception(tmp_path):
-    at = _run("pages/1_Journal.py", tmp_path)
+    at = _run("views/1_Journal.py", tmp_path)
     assert not at.exception
 
 
 def test_config_runs_without_exception(tmp_path):
-    at = _run("pages/2_Regles_et_compte.py", tmp_path)
+    at = _run("views/2_Regles_et_compte.py", tmp_path)
     assert not at.exception
 
 
 def test_calculator_runs_without_exception(tmp_path):
-    at = _run("pages/3_Calculateur.py", tmp_path)
+    at = _run("views/3_Calculateur.py", tmp_path)
     assert not at.exception
 
 
 def test_analytics_runs_empty(tmp_path):
-    at = _run("pages/4_Analytics.py", tmp_path)
+    at = _run("views/4_Analytics.py", tmp_path)
     assert not at.exception
 
 
@@ -73,7 +73,7 @@ def test_analytics_runs_with_data(tmp_path):
                            risk_pct=0.01, now=now, emotion_tag=emo)
         R.close_trade(conn, tid, realized_pnl_amount=pnl, now=now)
 
-    at = AppTest.from_file(str(ROOT / "pages/4_Analytics.py"), default_timeout=60)
+    at = AppTest.from_file(str(ROOT / "views/4_Analytics.py"), default_timeout=60)
     at.run()
     assert not at.exception
 
@@ -90,12 +90,12 @@ def test_login_shown_when_auth_required(tmp_path, monkeypatch):
 
 
 def test_coach_runs_empty(tmp_path):
-    at = _run("pages/5_Coach.py", tmp_path)
+    at = _run("views/5_Coach.py", tmp_path)
     assert not at.exception
 
 
 def test_admin_runs_without_exception(tmp_path):
-    at = _run("pages/6_Admin.py", tmp_path)
+    at = _run("views/6_Admin.py", tmp_path)
     assert not at.exception
 
 
@@ -113,7 +113,7 @@ def test_coach_runs_with_data(tmp_path):
                            risk_pct=0.01, now=now, emotion_tag=emo, setup="Breakout")
         R.close_trade(conn, tid, realized_pnl_amount=pnl, now=now)
 
-    at = AppTest.from_file(str(ROOT / "pages/5_Coach.py"), default_timeout=60)
+    at = AppTest.from_file(str(ROOT / "views/5_Coach.py"), default_timeout=60)
     at.run()
     assert not at.exception
 

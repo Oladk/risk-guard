@@ -48,25 +48,7 @@ st.session_state["_conn"] = conn  # réutilisée par les pages (1 connexion/reru
 shell.start(conn)  # gate d'authentification (mode cloud) + PWA + CSS mobile
 
 with st.sidebar:
-    _lp = TH.pal()
-    st.markdown(
-        f"""
-        <div style="display:flex;align-items:center;gap:11px;margin:2px 0 2px;">
-          <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true">
-            <circle cx="22" cy="24" r="18" fill="none" stroke="{_lp['logo_ring']}" stroke-width="2"/>
-            <circle cx="22" cy="24" r="10" fill="none" stroke="{TH.ACCENT}" stroke-width="2"/>
-            <line x1="4" y1="24" x2="40" y2="24" stroke="{_lp['logo_ring']}" stroke-width="1.4" opacity="0.6"/>
-            <line x1="22" y1="6" x2="22" y2="42" stroke="{_lp['logo_ring']}" stroke-width="1.4" opacity="0.6"/>
-            <circle cx="22" cy="24" r="2.6" fill="{TH.ACCENT}"/>
-            <circle cx="31" cy="16" r="3.4" fill="#FF5D62"/>
-          </svg>
-          <span style="font-size:1.5rem;font-weight:800;letter-spacing:-.01em;color:{_lp['logo_text']};">Vigie</span>
-        </div>
-        <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.16em;
-                    text-transform:uppercase;color:{_lp['logo_sub']};margin:0 0 8px 2px;">L'œil sur ton risque</div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown(TH.brand_html(), unsafe_allow_html=True)
     account_id = account_selector.render(conn)
     shell.sidebar_user_controls()
 

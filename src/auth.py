@@ -121,7 +121,9 @@ def _ensure_account(conn: sqlite3.Connection, user_id: int, username: str) -> No
 
 def _render_login(conn: sqlite3.Connection) -> None:
     import streamlit as st
-    st.title("🔭 Vigie — Connexion")
+    from . import theme as TH
+    st.markdown(TH.brand_html(size=46, title_rem=2.0, subtitle=False),
+                unsafe_allow_html=True)
     st.caption("L'œil sur ton risque — surveille tes limites, garde la main.")
     tab_login, tab_register = st.tabs(["Connexion", "Créer un compte"])
 

@@ -84,9 +84,9 @@ def test_login_shown_when_auth_required(tmp_path, monkeypatch):
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=60)
     at.run()
     assert not at.exception
-    # Le gate a affiché la connexion et stoppé la page (pas de cockpit).
-    assert any("Connexion" in t.value for t in at.title)
+    # Le gate a affiché la connexion (logo + formulaire) et stoppé la page (pas de cockpit).
     assert not any("Cockpit" in t.value for t in at.title)
+    assert any("utilisateur" in ti.label.lower() for ti in at.text_input)
 
 
 def test_coach_runs_empty(tmp_path):
